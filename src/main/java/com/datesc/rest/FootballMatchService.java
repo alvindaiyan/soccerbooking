@@ -39,11 +39,11 @@ public class FootballMatchService
     @POST
     @Path("/proposal")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response proposeMatch(@QueryParam("where") String where,
-                                 @QueryParam("startTime") String startTime,
-                                 @QueryParam("type") String gameType,
-                                 @QueryParam("level") String gameLevel,
-                                 @QueryParam("cost") @DefaultValue("-1") double cost)
+    public Response proposeMatch(@FormParam("where") String where,
+                                 @FormParam("startTime") String startTime,
+                                 @FormParam("type") String gameType,
+                                 @FormParam("level") String gameLevel,
+                                 @FormParam("cost") @DefaultValue("-1") double cost)
     {
         try
         {
@@ -51,10 +51,9 @@ public class FootballMatchService
             Match match = new Match();
             // made up the match by the params
             match.setLocation(where);
-
             // set date
-            Date date = new SimpleDateFormat().parse(startTime);
-            match.setStartTime(date);
+//            Date date = new SimpleDateFormat().parse(startTime);
+//            match.setStartTime(date);
             match.setType(gameType);
             match.setLevel(gameLevel);
             match.setCost(cost);
@@ -65,7 +64,7 @@ public class FootballMatchService
 
             return Response.status(Response.Status.ACCEPTED).entity(jsonStr).build();
         }
-        catch (ParseException e)
+        catch (Exception e)
         {
             logger.error("error - propose a match", e);
             return Response.status(Response.Status.ACCEPTED).entity(e.getMessage()).build();
