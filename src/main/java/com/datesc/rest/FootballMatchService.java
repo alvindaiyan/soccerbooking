@@ -1,6 +1,7 @@
 package com.datesc.rest;
 
 import com.datesc.model.Match;
+import com.datesc.DAO.MatchDAO;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -10,9 +11,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -35,6 +36,17 @@ public class FootballMatchService
         return Response.status(Response.Status.ACCEPTED).entity(output).build();
     }
 
+    @GET
+    @Path("/browse")
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Response getMatch()
+    {
+        // todo need a filter method
+        List<Match> matchList = MatchDAO.get().getAllMatches();
+        String result = convert2JsonStr(matchList);
+        return  Response.status(Response.Status.ACCEPTED).entity(result).build();
+    }
+
 
     @POST
     @Path("/proposal")
@@ -52,23 +64,36 @@ public class FootballMatchService
             // made up the match by the params
             match.setLocation(where);
             // set date
-//            Date date = new SimpleDateFormat().parse(startTime);
-//            match.setStartTime(date);
+            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(startTime);
+            match.setStartTime(date);
             match.setType(gameType);
             match.setLevel(gameLevel);
             match.setCost(cost);
 
             // convert to a json string to pass back to the client
-            Gson gson = new Gson();
-            String jsonStr = gson.toJson(match);
+            String jsonStr = convert2JsonStr(match);
 
-            return Response.status(Response.Status.ACCEPTED).entity(jsonStr).build();
+            // todo save to db
+            MatchDAO.insert(match);
+            
+            return Response.status(Response.Status.OK).entity(jsonStr).build();
         }
         catch (Exception e)
         {
             logger.error("error - propose a match", e);
-            return Response.status(Response.Status.ACCEPTED).entity(e.getMessage()).build();
+            String err = getJsonErrMsg(e);
+            return Response.status(Response.Status.ACCEPTED).entity(err).build();
         }
+    }
+
+
+    // ==========================================================================
+    // some util functions
+    // ==========================================================================
+    private static String getJsonErrMsg(Exception e)
+    {
+        if(e == null) throw new NullPointerException("error - getJsonErrMsg");
+        return "{\"error\", \"" + e.getMessage() + "\"}";
     }
 
     private static void initLog4j()
@@ -84,6 +109,13 @@ public class FootballMatchService
             System.out.println("Could not load log4j");
         }
 
+    }
+
+
+    private static String convert2JsonStr(Object obj)
+    {
+        Gson gson = new Gson();
+        return gson.toJson(obj);
     }
 
     private static Logger logger = Logger.getLogger(FootballMatchService.class);
