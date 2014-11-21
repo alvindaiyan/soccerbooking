@@ -23,10 +23,7 @@ import java.util.Properties;
 @Path("/soccer")
 public class FootballMatchService
 {
-    public FootballMatchService()
-    {
-        initLog4j();
-    }
+
 
     @GET
     @Path("/test")
@@ -39,7 +36,7 @@ public class FootballMatchService
     @GET
     @Path("/browse")
     @Produces(MediaType.APPLICATION_JSON)
-    public  Response getMatch()
+    public  Response getAllMatch()
     {
         // todo need a filter method
         List<Match> matchList = MatchDAO.get().getAllMatches();
@@ -79,9 +76,7 @@ public class FootballMatchService
             return Response.status(Response.Status.OK).entity(jsonStr).build();
         }
         catch (Exception e)
-        {
-            logger.error("error - propose a match", e);
-            String err = getJsonErrMsg(e);
+        {   String err = getJsonErrMsg(e);
             return Response.status(Response.Status.ACCEPTED).entity(err).build();
         }
     }
@@ -96,28 +91,11 @@ public class FootballMatchService
         return "{\"error\", \"" + e.getMessage() + "\"}";
     }
 
-    private static void initLog4j()
-    {
-        try
-        {
-            Properties props = new Properties();
-            props.load(new FileInputStream("log4j.properties"));
-            PropertyConfigurator.configure(props);
-        }
-        catch (IOException e)
-        {
-            System.out.println("Could not load log4j");
-        }
-
-    }
-
 
     private static String convert2JsonStr(Object obj)
     {
         Gson gson = new Gson();
         return gson.toJson(obj);
     }
-
-    private static Logger logger = Logger.getLogger(FootballMatchService.class);
 
 }

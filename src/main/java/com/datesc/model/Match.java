@@ -1,6 +1,7 @@
 package com.datesc.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Todo: type, level should be enum rather than String
@@ -14,6 +15,12 @@ public class Match
     private String type;
     private String level;
     private double cost;
+
+    private List<Player> hostTeam;
+    private List<Player> guestTeam;
+    private List<Referee>  referees;
+
+    private boolean finished_setup = false;
 
 
     public String getLocation()
@@ -64,5 +71,43 @@ public class Match
     public void setCost(double cost)
     {
         this.cost = cost;
+    }
+
+    public List<Player> getHostTeam()
+    {
+        return hostTeam;
+    }
+
+    public void setHostTeam(List<Player> hostTeam)
+    {
+        this.hostTeam = hostTeam;
+    }
+
+    public List<Player> getGuestTeam()
+    {
+        return guestTeam;
+    }
+
+    public void setGuestTeam(List<Player> guestTeam)
+    {
+        this.guestTeam = guestTeam;
+    }
+
+    public List<Referee> getReferees()
+    {
+        return referees;
+    }
+
+    public void setReferees(List<Referee> referees)
+    {
+        this.referees = referees;
+    }
+
+
+    // TODO need check whether the game has enough people to play
+    // TODO check whether others requirements are reached
+    public boolean isFinished_setup()
+    {
+        return true;
     }
 }
