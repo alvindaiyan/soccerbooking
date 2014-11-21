@@ -10,3 +10,7 @@
 <li>a audit system for whether the people show up</li>
 <li>the audit system should have a credit evaluation system</li>
 </ul>
+
+<h2> UI side</h2>
+
+Create the basic testing page
