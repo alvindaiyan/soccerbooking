@@ -24,15 +24,6 @@ import java.util.Properties;
 public class FootballMatchService
 {
 
-
-    @GET
-    @Path("/test")
-    public Response getMsg()
-    {
-        String output = "Jersey say : test" ;
-        return Response.status(Response.Status.ACCEPTED).entity(output).build();
-    }
-
     @GET
     @Path("/browse")
     @Produces(MediaType.APPLICATION_JSON)
