@@ -1,20 +1,17 @@
 package com.datesc.rest;
 
+import com.datesc.DAO.PlayerDAO;
 import com.datesc.model.Match;
 import com.datesc.DAO.MatchDAO;
+import com.datesc.model.Player;
 import com.google.gson.Gson;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Services include start a game
@@ -30,9 +27,23 @@ public class FootballMatchService
     public  Response getAllMatch()
     {
         // todo need a filter method
-        List<Match> matchList = MatchDAO.get().getAllMatches();
+        List<Match> matchList = MatchDAO.get().selectAll();
         String result = convert2JsonStr(matchList);
         return  Response.status(Response.Status.ACCEPTED).entity(result).build();
+    }
+
+
+    @POST
+    @Path("/join")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response joinMatch(@QueryParam("gameId") int gameid,
+                              @QueryParam("userid") int userid)
+    {
+
+        Match match = MatchDAO.get().getById(gameid);
+        Player player = PlayerDAO.get().getById(userid);
+
+        return Response.status(Response.Status.ACCEPTED).entity("join game").build();
     }
 
 

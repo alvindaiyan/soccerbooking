@@ -23,9 +23,13 @@ public class MatchDAO
         return singleton;
     }
 
-    public static List<Match> getAllMatches()
+    public static List<Match> selectAll()
     {
         // todo: implement the stub
+        return null;
+    }
+
+    public static Match getById(int id) {
         return null;
     }
 
