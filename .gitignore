@@ -39,3 +39,6 @@ ehthumbs.db
 Thumbs.db
 *.iml
 .idea/
+
+
+jdbc.properties
